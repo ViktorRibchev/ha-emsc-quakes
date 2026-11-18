@@ -1,0 +1,10 @@
+{
+  "domain": "emsc_quakes",
+  "name": "EMSC Earthquakes",
+  "codeowners": ["@ViktorRibchev"],
+  "documentation": "https://github.com/ViktorRibchev/ha-emsc-quakes",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/ViktorRibchev/ha-emsc-quakes/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
