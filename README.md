@@ -1,4 +1,4 @@
-# EMSC Earthquakes for Home Assistant
+# <img src="custom_components/emsc_quakes/brand/icon.png" alt="" width="48" align="top"> EMSC Earthquakes for Home Assistant
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories/)
 [![Validate](https://github.com/ViktorRibchev/ha-emsc-quakes/actions/workflows/validate.yml/badge.svg)](https://github.com/ViktorRibchev/ha-emsc-quakes/actions/workflows/validate.yml)
