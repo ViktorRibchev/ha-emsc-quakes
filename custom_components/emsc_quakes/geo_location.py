@@ -11,18 +11,18 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util.location import distance
 
+from .const import CONF_DAYS, DEFAULT_DAYS, DEFAULT_RADIUS, DOMAIN
+
 _LOGGER = logging.getLogger(__name__)
-DOMAIN = "emsc_quakes"
 URL = "https://www.seismicportal.eu/fdsnws/event/1/query"
-CONF_DAYS = "days"
 KM_PER_DEGREE = 111.195
 
 PLATFORM_SCHEMA = BASE_SCHEMA.extend(
     {
         vol.Optional(CONF_LATITUDE): cv.latitude,
         vol.Optional(CONF_LONGITUDE): cv.longitude,
-        vol.Optional(CONF_RADIUS, default=250): vol.Coerce(float),  # km; 250 km radius = 500 km circle
-        vol.Optional(CONF_DAYS, default=30): cv.positive_int,  # history kept on the map
+        vol.Optional(CONF_RADIUS, default=DEFAULT_RADIUS): vol.Coerce(float),  # km; 250 km radius = 500 km circle
+        vol.Optional(CONF_DAYS, default=DEFAULT_DAYS): cv.positive_int,  # history kept on the map
     }
 )
 
@@ -38,15 +38,28 @@ def query_params(lat, lon, radius_km, days, now):
     }
 
 
+async def async_setup_entry(hass, entry, async_add_entities):
+    o = entry.options
+    entry.async_on_unload(
+        await _start(hass, (o[CONF_LATITUDE], o[CONF_LONGITUDE]), o[CONF_RADIUS], o[CONF_DAYS], async_add_entities)
+    )
+
+
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    """Legacy YAML setup, kept so v1.0 configs keep working."""
     home = (config.get(CONF_LATITUDE, hass.config.latitude), config.get(CONF_LONGITUDE, hass.config.longitude))
+    await _start(hass, home, config[CONF_RADIUS], config[CONF_DAYS], async_add_entities)
+
+
+async def _start(hass, home, radius_km, days, async_add_entities):
+    """Fetch now, then poll every 2 minutes. Returns the unsubscribe callback."""
     session = async_get_clientsession(hass)
     entities: dict[str, Quake] = {}
     first_run = True
 
     async def update(_now=None):
         nonlocal first_run
-        params = query_params(*home, config[CONF_RADIUS], config[CONF_DAYS], datetime.now(timezone.utc))
+        params = query_params(*home, radius_km, days, datetime.now(timezone.utc))
         try:
             async with session.get(URL, params=params, timeout=30) as resp:
                 if resp.status == 204:  # FDSN: no events in window
@@ -80,7 +93,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
         first_run = False
 
     await update()
-    async_track_time_interval(hass, update, timedelta(minutes=2))
+    return async_track_time_interval(hass, update, timedelta(minutes=2))
 
 
 class Quake(GeolocationEvent):

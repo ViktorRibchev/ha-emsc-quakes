@@ -1,0 +1,36 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EMSC Earthquakes",
+        "data": {
+          "location": "Centre of the search area",
+          "radius": "Radius",
+          "days": "History to keep on the map"
+        },
+        "data_description": {
+          "location": "Quakes are searched in a circle around this point.",
+          "radius": "250 km radius covers a 500 km wide circle.",
+          "days": "Older quakes are removed from the map."
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "EMSC Earthquakes",
+        "data": {
+          "location": "Centre of the search area",
+          "radius": "Radius",
+          "days": "History to keep on the map"
+        },
+        "data_description": {
+          "location": "Quakes are searched in a circle around this point.",
+          "radius": "250 km radius covers a 500 km wide circle.",
+          "days": "Older quakes are removed from the map."
+        }
+      }
+    }
+  }
+}

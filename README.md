@@ -25,21 +25,32 @@ Copy `custom_components/emsc_quakes` into your `config/custom_components/` folde
 
 ## Configuration
 
+[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=emsc_quakes)
+
+**Settings → Devices & services → Add integration → EMSC Earthquakes**, then pick:
+
+| Option | Default | Description |
+| --- | --- | --- |
+| Centre | home location | Centre of the search circle (pick on the map) |
+| Radius | `250` km | 250 km radius = 500 km circle |
+| History | `30` days | How far back quakes stay on the map |
+
+Change them later with **Configure** on the integration. Add the integration more than once to watch several areas.
+
+<details>
+<summary>YAML (legacy, still supported)</summary>
+
 ```yaml
 # configuration.yaml
 geo_location:
   - platform: emsc_quakes
     radius: 250 # km, optional
-    days: 30 # history on the map, optional
+    days: 30 # optional
     # latitude: 44.5   # optional, defaults to your home location
     # longitude: 25.5
 ```
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `latitude` / `longitude` | home location | Centre of the search circle |
-| `radius` | `250` | Radius in km |
-| `days` | `30` | How far back quakes stay on the map |
+</details>
 
 ## Alerts
 
